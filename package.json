@@ -1,0 +1,9 @@
+{
+	"name": "gql-tweets",
+	"version": "1.0.0",
+	"license": "MIT",
+	"scripts": {
+		"server": "npm run dev --prefix server",
+		"server:studio": "npm run studio --prefix server"
+	}
+}

@@ -1,0 +1,4 @@
+{
+	"cSpell.words": ["datasource", "fastify", "healthcheck", "unfollow"],
+	"conventionalCommits.scopes": ["server", "web"]
+}
