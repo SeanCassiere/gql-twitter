@@ -3,7 +3,7 @@ import fastifyCors from "@fastify/cors";
 import fastifyCookie from "@fastify/cookie";
 import fastifyJwt from "@fastify/jwt";
 
-import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
+import { ApolloServerPluginDrainHttpServer, ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import { ApolloServer } from "apollo-server-fastify";
 import { ApolloServerPlugin } from "apollo-server-plugin-base";
 import { SubscriptionServer } from "subscriptions-transport-ws";
@@ -22,7 +22,7 @@ import PostResolver from "#root/modules/post/post.resolver";
 
 import { userBatchLoader } from "./dataLoaderBatchers";
 
-const app = fastify({});
+const app = fastify();
 
 app.register(fastifyCors, {
 	credentials: true,
@@ -37,7 +37,11 @@ app.register(fastifyCors, {
 });
 
 app.register(fastifyCookie, {
-	parseOptions: {},
+	secret: env.COOKIE_SECRET,
+	parseOptions: {
+		signed: true,
+		secure: env.IS_PRODUCTION,
+	},
 });
 
 app.register(fastifyJwt, {
@@ -61,7 +65,7 @@ function fastifyAppClosePlugin(app: FastifyInstance): ApolloServerPlugin {
 	};
 }
 
-type CtxUser = Omit<User, "password">;
+export type CtxUser = Omit<User, "password">;
 
 const userLoader = new DataLoader<string, FollowUser>(userBatchLoader);
 
@@ -80,6 +84,8 @@ async function buildContext({
 		Authorization: string;
 	};
 }) {
+	const { jwt } = app;
+
 	if (connectionParams || !request) {
 		try {
 			const isBearer = connectionParams?.Authorization?.startsWith("Bearer ");
@@ -87,20 +93,21 @@ async function buildContext({
 			return {
 				request,
 				reply,
-				user: app.jwt.verify<CtxUser>(token || ""),
+				user: jwt.verify<CtxUser>(token || ""),
+				jwt,
 				...loaders,
 			};
 		} catch (e) {
-			return { request, reply, user: null, ...loaders };
+			return { request, reply, user: null, jwt, ...loaders };
 		}
 	}
 
 	try {
 		const user = await request.jwtVerify<CtxUser>();
 
-		return { request, reply, user: user ?? null, ...loaders };
+		return { request, reply, user: user ?? null, jwt, ...loaders };
 	} catch (e) {
-		return { request, reply, user: null, ...loaders };
+		return { request, reply, user: null, jwt, ...loaders };
 	}
 }
 
@@ -112,9 +119,15 @@ export async function createServer() {
 		authChecker: bearerAuthChecker,
 	});
 
+	const apolloServerPlugins = [fastifyAppClosePlugin(app)];
+	if (env.USE_APOLLO_PLAYGROUND) {
+		apolloServerPlugins.push(ApolloServerPluginLandingPageGraphQLPlayground());
+	}
+	apolloServerPlugins.push(ApolloServerPluginDrainHttpServer({ httpServer: app.server }));
+
 	const server = new ApolloServer({
 		schema,
-		plugins: [fastifyAppClosePlugin(app), ApolloServerPluginDrainHttpServer({ httpServer: app.server })],
+		plugins: apolloServerPlugins,
 		context: buildContext,
 		introspection: true,
 		csrfPrevention: true,
@@ -122,7 +135,7 @@ export async function createServer() {
 
 	subscriptionServer({ schema, server: app.server });
 
-	return { app, server };
+	return { app: app, server };
 }
 
 const subscriptionServer = ({ schema, server }: { schema: GraphQLSchema; server: typeof app.server }) => {

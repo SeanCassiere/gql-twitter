@@ -1,4 +1,4 @@
 {
-	"cSpell.words": ["datasource", "fastify", "healthcheck", "unfollow"],
+	"cSpell.words": ["datasource", "fastify", "healthcheck", "Mantine", "modulz", "tailwindcss", "unfollow", "unsign"],
 	"conventionalCommits.scopes": ["server", "web"]
 }
