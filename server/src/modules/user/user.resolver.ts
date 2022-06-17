@@ -13,6 +13,7 @@ import {
 	UserFollowers,
 } from "./user.dto";
 import env from "#root/utils/env";
+import { CookieSerializeOptions } from "@fastify/cookie";
 
 @Resolver(() => User)
 class UserResolver {
@@ -83,12 +84,7 @@ class UserResolver {
 		}
 
 		const accessToken = await ctx.reply?.jwtSign(
-			{
-				id: user.id,
-				email: user.email,
-
-				// iat: new Date().getTime(),
-			},
+			{ id: user.id, email: user.email },
 			{
 				sign: {
 					sub: user.id,
@@ -98,10 +94,7 @@ class UserResolver {
 		);
 
 		const refreshToken = await ctx.reply?.jwtSign(
-			{
-				id: user.id,
-				email: user.email,
-			},
+			{ id: user.id, email: user.email },
 			{
 				sign: {
 					sub: user.id,
@@ -113,19 +106,19 @@ class UserResolver {
 			throw new ApolloError("Error signing access token");
 		}
 
+		const cookieOptions: CookieSerializeOptions = {
+			sameSite: "none",
+			secure: true,
+			httpOnly: true,
+			signed: true,
+		};
 		ctx.reply
 			?.setCookie("token", accessToken, {
-				sameSite: "none",
-				secure: true,
-				httpOnly: true,
-				signed: true,
+				...cookieOptions,
 			})
 			?.setCookie("refreshToken", refreshToken, {
-				secure: true,
-				sameSite: "none",
-				httpOnly: true,
+				...cookieOptions,
 				expires: new Date(new Date().setMinutes(new Date().getMinutes() + 60)),
-				signed: true,
 			});
 
 		return {
@@ -157,15 +150,12 @@ class UserResolver {
 			}
 
 			const accessToken = await ctx.reply?.jwtSign(
+				{ id: user.id, email: user.email },
 				{
-					id: user.id,
-					email: user.email,
-
-					// iat: new Date().getTime(),
-				},
-				{
-					sub: user.id,
-					expiresIn: 60 * 60,
+					sign: {
+						sub: user.id,
+						expiresIn: 60 * 60 * 60,
+					},
 				}
 			);
 
@@ -173,11 +163,14 @@ class UserResolver {
 				return null;
 			}
 
-			ctx.reply?.setCookie("token", accessToken, {
+			const cookieOptions: CookieSerializeOptions = {
 				sameSite: "none",
 				secure: true,
 				httpOnly: true,
 				signed: true,
+			};
+			ctx.reply?.setCookie("token", accessToken, {
+				...cookieOptions,
 			});
 
 			return {
@@ -191,7 +184,20 @@ class UserResolver {
 
 	@Mutation(() => Boolean)
 	async userLogout(@Ctx() ctx: GqlContext): Promise<boolean> {
-		ctx.reply?.clearCookie("token").clearCookie("refreshToken");
+		const logoutOptions: CookieSerializeOptions = {
+			sameSite: "none",
+			secure: true,
+			httpOnly: true,
+			expires: new Date(Date.now() - 60 * 60 * 24 * 365),
+			signed: true,
+		};
+		ctx.reply
+			?.setCookie("token", "null", {
+				...logoutOptions,
+			})
+			.setCookie("refreshToken", "null", {
+				...logoutOptions,
+			});
 		return true;
 	}
 
