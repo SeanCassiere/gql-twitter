@@ -115,18 +115,16 @@ class UserResolver {
 
 		ctx.reply
 			?.setCookie("token", accessToken, {
-				secure: env.IS_PRODUCTION,
+				sameSite: "none",
+				secure: true,
 				httpOnly: true,
-				// sameSite: "none",
-				sameSite: "lax",
 				signed: true,
 			})
-			.setCookie("refreshToken", refreshToken, {
-				secure: env.IS_PRODUCTION,
+			?.setCookie("refreshToken", refreshToken, {
+				secure: true,
+				sameSite: "none",
 				httpOnly: true,
 				expires: new Date(new Date().setMinutes(new Date().getMinutes() + 60)),
-				// sameSite: "none",
-				sameSite: "lax",
 				signed: true,
 			});
 
@@ -175,6 +173,13 @@ class UserResolver {
 				return null;
 			}
 
+			ctx.reply?.setCookie("token", accessToken, {
+				sameSite: "none",
+				secure: true,
+				httpOnly: true,
+				signed: true,
+			});
+
 			return {
 				accessToken,
 			};
@@ -184,7 +189,7 @@ class UserResolver {
 		}
 	}
 
-	@Query(() => Boolean)
+	@Mutation(() => Boolean)
 	async userLogout(@Ctx() ctx: GqlContext): Promise<boolean> {
 		ctx.reply?.clearCookie("token").clearCookie("refreshToken");
 		return true;

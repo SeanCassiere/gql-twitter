@@ -25,7 +25,6 @@ import { userBatchLoader } from "./dataLoaderBatchers";
 const app = fastify();
 
 app.register(fastifyCors, {
-	credentials: true,
 	origin: (origin, cb) => {
 		if (!origin || [...env.FRONTEND_HOSTS, "https://studio.apollographql.com"].includes(origin)) {
 			return cb(null, true);
@@ -34,14 +33,12 @@ app.register(fastifyCors, {
 		return cb(new Error(`Origin of ${origin} is not allowed`), false);
 		// return cb(null, true);
 	},
+	credentials: true,
 });
 
 app.register(fastifyCookie, {
 	secret: env.COOKIE_SECRET,
-	parseOptions: {
-		signed: true,
-		secure: env.IS_PRODUCTION,
-	},
+	parseOptions: {},
 });
 
 app.register(fastifyJwt, {
