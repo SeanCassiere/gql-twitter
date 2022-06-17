@@ -4,6 +4,7 @@
 	"license": "MIT",
 	"scripts": {
 		"server": "npm run dev --prefix server",
-		"server:studio": "npm run studio --prefix server"
+		"server:studio": "npm run studio --prefix server",
+		"web": "npm run dev --prefix web"
 	}
 }
