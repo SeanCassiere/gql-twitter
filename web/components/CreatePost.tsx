@@ -1,29 +1,19 @@
-import { gql, useMutation } from "@apollo/client";
+import React from "react";
+import { useMutation } from "@apollo/client";
 import { useForm } from "@mantine/form";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+
+import { UserTimePostsQuery } from "../graphql/queries";
 import { CreatePostFormMutation, CreatePostFormMutationVariables } from "../graphql/schema.generated";
 import { FormButton } from "./FormComponents";
-import { UserTimePostsQuery } from "./UserTImeline";
+import { CreatePostMutation } from "../graphql/mutations";
 
 const MESSAGE_MAX_LENGTH = 280;
 
-const CreatePostMutation = gql`
-	mutation CreatePostForm($input: PostCreateInput!) {
-		postCreate(input: $input) {
-			id
-			body
-			user {
-				username
-			}
-		}
-	}
-`;
-
 interface Props {
 	onSuccess?: () => void;
-	onError?: () => void;
+	onFail?: () => void;
 }
 
 const CreatePost: React.FC<Props> = (props) => {
@@ -61,8 +51,8 @@ const CreatePost: React.FC<Props> = (props) => {
 						form.reset();
 					})
 					.catch((e) => {
-						if (props.onError) {
-							props.onError();
+						if (props.onFail) {
+							props.onFail();
 						}
 					})
 					.finally(() => {});
@@ -88,7 +78,7 @@ const CreatePost: React.FC<Props> = (props) => {
 						<div>
 							<textarea
 								rows={3}
-								className='p-2 w-full text-sm text-gray-900 border rounded border-gray-50 bg-white dark:text-white dark:placeholder-gray-400 placeholder:text-lg'
+								className='p-2 w-full text-sm text-gray-900 border rounded border-gray-50 bg-white placeholder:text-lg'
 								placeholder="What's happening?"
 								maxLength={MESSAGE_MAX_LENGTH}
 								required

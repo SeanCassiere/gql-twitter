@@ -1,14 +1,16 @@
 import { createContext, useContext, FC, useState, useCallback, useEffect } from "react";
-import { gql, useMutation, useLazyQuery } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
 
 import { fromBase64 } from "../shared/utils";
 import {
-	MeQueryContextQuery,
-	MeQueryContextQueryVariables,
 	RefreshTokenContextQuery,
 	RefreshTokenContextQueryVariables,
 	LogoutContextMutation,
+	MeDataContextQueryQuery,
+	MeDataContextQueryQueryVariables,
 } from "../graphql/schema.generated";
+import { MeDataContextQuery, RefreshTokenQuery } from "../graphql/queries";
+import { LogoutMutation } from "../graphql/mutations";
 
 export const ACCESS_TOKEN_KEY = "gql-twitter-auth-token";
 
@@ -28,33 +30,10 @@ const initialAuthState: AuthState = {
 
 const AuthContext = createContext<AuthState>(initialAuthState);
 
-const MeQueryContext = gql`
-	query MeQueryContext {
-		me {
-			id
-			username
-		}
-	}
-`;
-
-const RefreshTokenQuery = gql`
-	query RefreshTokenContext {
-		userToken {
-			accessToken
-		}
-	}
-`;
-
-const LogoutMutation = gql`
-	mutation LogoutContext {
-		userLogout
-	}
-`;
-
 export const AuthProvider: FC<{ children: any }> = (props) => {
 	const [userToken, setUserToken] = useState<string | null>(null);
 
-	const [fetchMeQuery] = useLazyQuery<MeQueryContextQuery, MeQueryContextQueryVariables>(MeQueryContext, {
+	const [fetchMeQuery] = useLazyQuery<MeDataContextQueryQuery, MeDataContextQueryQueryVariables>(MeDataContextQuery, {
 		fetchPolicy: "network-only",
 		onCompleted: () => {
 			const token = localStorage.getItem(ACCESS_TOKEN_KEY);

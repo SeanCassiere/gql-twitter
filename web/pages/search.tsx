@@ -1,20 +1,13 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { Box, Title } from "@mantine/core";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
-const SearchPageMeQuery = gql`
-	query SearchPageMeQuery {
-		me {
-			id
-			username
-			fullName
-		}
-	}
-`;
+import { MeDataContextQuery } from "../graphql/queries";
+import { MeDataContextQueryQuery } from "../graphql/schema.generated";
 
 const Search: NextPage = () => {
-	const { data, error } = useQuery(SearchPageMeQuery);
+	const { data, error } = useQuery<MeDataContextQueryQuery>(MeDataContextQuery);
 	return (
 		<>
 			<Head>

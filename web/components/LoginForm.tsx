@@ -1,21 +1,16 @@
 import React from "react";
 import { TextInput, Group, Button } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
+
 import { useAuthContext } from "../context/authContext";
 import { LoginFromFormMutation, LoginFromFormMutationVariables } from "../graphql/schema.generated";
+import { LoginMutation } from "../graphql/mutations";
 
 interface Props {
 	onSuccess?: () => void;
+	onFail?: () => void;
 }
-
-const LoginMutation = gql`
-	mutation LoginFromForm($input: LoginUserInput!) {
-		userLogin(input: $input) {
-			accessToken
-		}
-	}
-`;
 
 const LoginForm: React.FC<Props> = (props) => {
 	const { signIn } = useAuthContext();

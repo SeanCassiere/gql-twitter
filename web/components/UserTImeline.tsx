@@ -1,20 +1,8 @@
-import { gql, useQuery } from "@apollo/client";
 import React from "react";
-import { UserTimelinePostsQuery } from "../graphql/schema.generated";
+import { useQuery } from "@apollo/client";
 
-export const UserTimePostsQuery = gql`
-	query UserTimelinePosts {
-		postsForTimeline {
-			id
-			body
-			createdAt
-			user {
-				id
-				username
-			}
-		}
-	}
-`;
+import { UserTimePostsQuery } from "../graphql/queries";
+import { UserTimelinePostsQuery } from "../graphql/schema.generated";
 
 interface Props {}
 

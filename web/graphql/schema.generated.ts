@@ -169,6 +169,11 @@ export type UserFollowers = {
   items: Array<User>;
 };
 
+export type LogoutContextMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutContextMutation = { __typename?: 'Mutation', userLogout: boolean };
+
 export type CreatePostFormMutationVariables = Exact<{
   input: PostCreateInput;
 }>;
@@ -195,27 +200,47 @@ export type UserTimelinePostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type UserTimelinePostsQuery = { __typename?: 'Query', postsForTimeline: Array<{ __typename?: 'Post', id: string, body: string, createdAt: string, user?: { __typename?: 'FollowUser', id: string, username: string } | null }> };
 
-export type MeQueryContextQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type MeQueryContextQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, username: string } | null };
-
 export type RefreshTokenContextQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type RefreshTokenContextQuery = { __typename?: 'Query', userToken?: { __typename?: 'LoginToken', accessToken: string } | null };
 
-export type LogoutContextMutationVariables = Exact<{ [key: string]: never; }>;
+export type MeDataContextQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LogoutContextMutation = { __typename?: 'Mutation', userLogout: boolean };
-
-export type SearchPageMeQueryQueryVariables = Exact<{ [key: string]: never; }>;
+export type MeDataContextQueryQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, username: string, fullName: string } | null };
 
 
-export type SearchPageMeQueryQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, username: string, fullName: string } | null };
+export const LogoutContextDocument = gql`
+    mutation LogoutContext {
+  userLogout
+}
+    `;
+export type LogoutContextMutationFn = Apollo.MutationFunction<LogoutContextMutation, LogoutContextMutationVariables>;
 
-
+/**
+ * __useLogoutContextMutation__
+ *
+ * To run a mutation, you first call `useLogoutContextMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLogoutContextMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [logoutContextMutation, { data, loading, error }] = useLogoutContextMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLogoutContextMutation(baseOptions?: Apollo.MutationHookOptions<LogoutContextMutation, LogoutContextMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LogoutContextMutation, LogoutContextMutationVariables>(LogoutContextDocument, options);
+      }
+export type LogoutContextMutationHookResult = ReturnType<typeof useLogoutContextMutation>;
+export type LogoutContextMutationResult = Apollo.MutationResult<LogoutContextMutation>;
+export type LogoutContextMutationOptions = Apollo.BaseMutationOptions<LogoutContextMutation, LogoutContextMutationVariables>;
 export const CreatePostFormDocument = gql`
     mutation CreatePostForm($input: PostCreateInput!) {
   postCreate(input: $input) {
@@ -360,41 +385,6 @@ export function useUserTimelinePostsLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type UserTimelinePostsQueryHookResult = ReturnType<typeof useUserTimelinePostsQuery>;
 export type UserTimelinePostsLazyQueryHookResult = ReturnType<typeof useUserTimelinePostsLazyQuery>;
 export type UserTimelinePostsQueryResult = Apollo.QueryResult<UserTimelinePostsQuery, UserTimelinePostsQueryVariables>;
-export const MeQueryContextDocument = gql`
-    query MeQueryContext {
-  me {
-    id
-    username
-  }
-}
-    `;
-
-/**
- * __useMeQueryContextQuery__
- *
- * To run a query within a React component, call `useMeQueryContextQuery` and pass it any options that fit your needs.
- * When your component renders, `useMeQueryContextQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useMeQueryContextQuery({
- *   variables: {
- *   },
- * });
- */
-export function useMeQueryContextQuery(baseOptions?: Apollo.QueryHookOptions<MeQueryContextQuery, MeQueryContextQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<MeQueryContextQuery, MeQueryContextQueryVariables>(MeQueryContextDocument, options);
-      }
-export function useMeQueryContextLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQueryContextQuery, MeQueryContextQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<MeQueryContextQuery, MeQueryContextQueryVariables>(MeQueryContextDocument, options);
-        }
-export type MeQueryContextQueryHookResult = ReturnType<typeof useMeQueryContextQuery>;
-export type MeQueryContextLazyQueryHookResult = ReturnType<typeof useMeQueryContextLazyQuery>;
-export type MeQueryContextQueryResult = Apollo.QueryResult<MeQueryContextQuery, MeQueryContextQueryVariables>;
 export const RefreshTokenContextDocument = gql`
     query RefreshTokenContext {
   userToken {
@@ -429,38 +419,8 @@ export function useRefreshTokenContextLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type RefreshTokenContextQueryHookResult = ReturnType<typeof useRefreshTokenContextQuery>;
 export type RefreshTokenContextLazyQueryHookResult = ReturnType<typeof useRefreshTokenContextLazyQuery>;
 export type RefreshTokenContextQueryResult = Apollo.QueryResult<RefreshTokenContextQuery, RefreshTokenContextQueryVariables>;
-export const LogoutContextDocument = gql`
-    mutation LogoutContext {
-  userLogout
-}
-    `;
-export type LogoutContextMutationFn = Apollo.MutationFunction<LogoutContextMutation, LogoutContextMutationVariables>;
-
-/**
- * __useLogoutContextMutation__
- *
- * To run a mutation, you first call `useLogoutContextMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLogoutContextMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [logoutContextMutation, { data, loading, error }] = useLogoutContextMutation({
- *   variables: {
- *   },
- * });
- */
-export function useLogoutContextMutation(baseOptions?: Apollo.MutationHookOptions<LogoutContextMutation, LogoutContextMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<LogoutContextMutation, LogoutContextMutationVariables>(LogoutContextDocument, options);
-      }
-export type LogoutContextMutationHookResult = ReturnType<typeof useLogoutContextMutation>;
-export type LogoutContextMutationResult = Apollo.MutationResult<LogoutContextMutation>;
-export type LogoutContextMutationOptions = Apollo.BaseMutationOptions<LogoutContextMutation, LogoutContextMutationVariables>;
-export const SearchPageMeQueryDocument = gql`
-    query SearchPageMeQuery {
+export const MeDataContextQueryDocument = gql`
+    query MeDataContextQuery {
   me {
     id
     username
@@ -470,28 +430,28 @@ export const SearchPageMeQueryDocument = gql`
     `;
 
 /**
- * __useSearchPageMeQueryQuery__
+ * __useMeDataContextQueryQuery__
  *
- * To run a query within a React component, call `useSearchPageMeQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchPageMeQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMeDataContextQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeDataContextQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSearchPageMeQueryQuery({
+ * const { data, loading, error } = useMeDataContextQueryQuery({
  *   variables: {
  *   },
  * });
  */
-export function useSearchPageMeQueryQuery(baseOptions?: Apollo.QueryHookOptions<SearchPageMeQueryQuery, SearchPageMeQueryQueryVariables>) {
+export function useMeDataContextQueryQuery(baseOptions?: Apollo.QueryHookOptions<MeDataContextQueryQuery, MeDataContextQueryQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SearchPageMeQueryQuery, SearchPageMeQueryQueryVariables>(SearchPageMeQueryDocument, options);
+        return Apollo.useQuery<MeDataContextQueryQuery, MeDataContextQueryQueryVariables>(MeDataContextQueryDocument, options);
       }
-export function useSearchPageMeQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchPageMeQueryQuery, SearchPageMeQueryQueryVariables>) {
+export function useMeDataContextQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeDataContextQueryQuery, MeDataContextQueryQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SearchPageMeQueryQuery, SearchPageMeQueryQueryVariables>(SearchPageMeQueryDocument, options);
+          return Apollo.useLazyQuery<MeDataContextQueryQuery, MeDataContextQueryQueryVariables>(MeDataContextQueryDocument, options);
         }
-export type SearchPageMeQueryQueryHookResult = ReturnType<typeof useSearchPageMeQueryQuery>;
-export type SearchPageMeQueryLazyQueryHookResult = ReturnType<typeof useSearchPageMeQueryLazyQuery>;
-export type SearchPageMeQueryQueryResult = Apollo.QueryResult<SearchPageMeQueryQuery, SearchPageMeQueryQueryVariables>;
+export type MeDataContextQueryQueryHookResult = ReturnType<typeof useMeDataContextQueryQuery>;
+export type MeDataContextQueryLazyQueryHookResult = ReturnType<typeof useMeDataContextQueryLazyQuery>;
+export type MeDataContextQueryQueryResult = Apollo.QueryResult<MeDataContextQueryQuery, MeDataContextQueryQueryVariables>;

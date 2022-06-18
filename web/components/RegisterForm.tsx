@@ -1,21 +1,15 @@
 import React from "react";
 import { TextInput, Button, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
+
 import { RegisterFromFormMutation, RegisterFromFormMutationVariables } from "../graphql/schema.generated";
+import { RegisterMutation } from "../graphql/mutations";
 
 interface Props {
 	onSuccess?: () => void;
+	onFail?: () => void;
 }
-
-const RegisterMutation = gql`
-	mutation RegisterFromForm($input: RegisterUserInput!) {
-		userCreate(input: $input) {
-			id
-			username
-		}
-	}
-`;
 
 const RegisterForm = (props: Props) => {
 	const [register] = useMutation<RegisterFromFormMutation, RegisterFromFormMutationVariables>(RegisterMutation);

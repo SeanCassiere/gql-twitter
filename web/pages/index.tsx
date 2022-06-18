@@ -28,7 +28,7 @@ const Home: NextPage = () => {
 				<div className='flex flex-row h-full'>
 					<div className='flex-1 flex flex-col overflow-y-auto relative pt-4 border border-r border-l-0 border-t-0 border-b-0'>
 						<div className='w-full px-4 sticky top-0'>
-							<div className='w-full mb-2 rounded-lg border bg-white border-gray-200 dark:bg-gray-700 dark:border-gray-600'>
+							<div className='w-full mb-2 rounded-lg border bg-white border-gray-200'>
 								<CreatePost />
 							</div>
 						</div>
