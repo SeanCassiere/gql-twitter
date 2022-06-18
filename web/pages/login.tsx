@@ -22,7 +22,7 @@ const Login: NextPage = () => {
 			<Head>
 				<title>Sign In</title>
 			</Head>
-			<Box className='pl-5' sx={{ maxWidth: 450 }}>
+			<Box className='pl-5 pt-4' sx={{ maxWidth: 450 }}>
 				<Title>Login</Title>
 				<h2 className='mt-2'>
 					Have an account? Don&#39;t waste your time! Sign in to <code>gql-twitter</code> now.

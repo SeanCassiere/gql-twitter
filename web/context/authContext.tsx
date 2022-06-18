@@ -73,7 +73,12 @@ export const AuthProvider: FC<{ children: any }> = (props) => {
 		{ fetchPolicy: "network-only" }
 	);
 
-	const [logout] = useMutation<LogoutContextMutation>(LogoutMutation, { fetchPolicy: "network-only" });
+	const [logout, { client }] = useMutation<LogoutContextMutation>(LogoutMutation, {
+		fetchPolicy: "network-only",
+		update(cache, result) {
+			client.resetStore().catch((e) => console.log(e));
+		},
+	});
 	const signOut = useCallback(() => {
 		logout().then(() => {
 			localStorage.removeItem(ACCESS_TOKEN_KEY);

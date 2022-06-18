@@ -23,7 +23,7 @@ const Register: NextPage = () => {
 			<Head>
 				<title>Sign Up</title>
 			</Head>
-			<Box className='pl-5' sx={{ maxWidth: 450 }}>
+			<Box className='pl-5 pt-4' sx={{ maxWidth: 450 }}>
 				<Title>Sign Up</Title>
 				<h2 className='mt-2'>
 					Get yourself signed up on the <code>gql-twitter</code> platform immediately.

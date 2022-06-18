@@ -41,7 +41,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 										<Paper className='flex flex-col justify-between items-center flex-none w-60'>
 											<Navbar />
 										</Paper>
-										<Paper className='flex-1 pt-5'>
+										<Paper className='flex-1 border border-l border-r rounded-none'>
 											<Component {...pageProps} />
 										</Paper>
 									</Container>
