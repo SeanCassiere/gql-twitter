@@ -19,8 +19,8 @@ model User {
   description String @default("")
   fullName String @default("")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
   followedBy User[] @relation("UserFollows", references: [id])
   following User[] @relation("UserFollows", references: [id])
@@ -32,8 +32,8 @@ model Post {
   id        String   @unique @default(uuid())
   body      String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
   user      User     @relation(fields: [userId], references: [id])
   userId    String
