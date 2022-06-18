@@ -169,6 +169,13 @@ export type UserFollowers = {
   items: Array<User>;
 };
 
+export type CreatePostFormMutationVariables = Exact<{
+  input: PostCreateInput;
+}>;
+
+
+export type CreatePostFormMutation = { __typename?: 'Mutation', postCreate: { __typename?: 'Post', id: string, body: string, user?: { __typename?: 'FollowUser', username: string } | null } };
+
 export type LoginFromFormMutationVariables = Exact<{
   input: LoginUserInput;
 }>;
@@ -182,6 +189,11 @@ export type RegisterFromFormMutationVariables = Exact<{
 
 
 export type RegisterFromFormMutation = { __typename?: 'Mutation', userCreate?: { __typename?: 'User', id: string, username: string } | null };
+
+export type UserTimelinePostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserTimelinePostsQuery = { __typename?: 'Query', postsForTimeline: Array<{ __typename?: 'Post', id: string, body: string, createdAt: string, user?: { __typename?: 'FollowUser', id: string, username: string } | null }> };
 
 export type MeQueryContextQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -198,7 +210,49 @@ export type LogoutContextMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type LogoutContextMutation = { __typename?: 'Mutation', userLogout: boolean };
 
+export type SearchPageMeQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
+
+export type SearchPageMeQueryQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, username: string, fullName: string } | null };
+
+
+export const CreatePostFormDocument = gql`
+    mutation CreatePostForm($input: PostCreateInput!) {
+  postCreate(input: $input) {
+    id
+    body
+    user {
+      username
+    }
+  }
+}
+    `;
+export type CreatePostFormMutationFn = Apollo.MutationFunction<CreatePostFormMutation, CreatePostFormMutationVariables>;
+
+/**
+ * __useCreatePostFormMutation__
+ *
+ * To run a mutation, you first call `useCreatePostFormMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePostFormMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPostFormMutation, { data, loading, error }] = useCreatePostFormMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreatePostFormMutation(baseOptions?: Apollo.MutationHookOptions<CreatePostFormMutation, CreatePostFormMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePostFormMutation, CreatePostFormMutationVariables>(CreatePostFormDocument, options);
+      }
+export type CreatePostFormMutationHookResult = ReturnType<typeof useCreatePostFormMutation>;
+export type CreatePostFormMutationResult = Apollo.MutationResult<CreatePostFormMutation>;
+export type CreatePostFormMutationOptions = Apollo.BaseMutationOptions<CreatePostFormMutation, CreatePostFormMutationVariables>;
 export const LoginFromFormDocument = gql`
     mutation LoginFromForm($input: LoginUserInput!) {
   userLogin(input: $input) {
@@ -266,6 +320,46 @@ export function useRegisterFromFormMutation(baseOptions?: Apollo.MutationHookOpt
 export type RegisterFromFormMutationHookResult = ReturnType<typeof useRegisterFromFormMutation>;
 export type RegisterFromFormMutationResult = Apollo.MutationResult<RegisterFromFormMutation>;
 export type RegisterFromFormMutationOptions = Apollo.BaseMutationOptions<RegisterFromFormMutation, RegisterFromFormMutationVariables>;
+export const UserTimelinePostsDocument = gql`
+    query UserTimelinePosts {
+  postsForTimeline {
+    id
+    body
+    createdAt
+    user {
+      id
+      username
+    }
+  }
+}
+    `;
+
+/**
+ * __useUserTimelinePostsQuery__
+ *
+ * To run a query within a React component, call `useUserTimelinePostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserTimelinePostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserTimelinePostsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserTimelinePostsQuery(baseOptions?: Apollo.QueryHookOptions<UserTimelinePostsQuery, UserTimelinePostsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserTimelinePostsQuery, UserTimelinePostsQueryVariables>(UserTimelinePostsDocument, options);
+      }
+export function useUserTimelinePostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserTimelinePostsQuery, UserTimelinePostsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserTimelinePostsQuery, UserTimelinePostsQueryVariables>(UserTimelinePostsDocument, options);
+        }
+export type UserTimelinePostsQueryHookResult = ReturnType<typeof useUserTimelinePostsQuery>;
+export type UserTimelinePostsLazyQueryHookResult = ReturnType<typeof useUserTimelinePostsLazyQuery>;
+export type UserTimelinePostsQueryResult = Apollo.QueryResult<UserTimelinePostsQuery, UserTimelinePostsQueryVariables>;
 export const MeQueryContextDocument = gql`
     query MeQueryContext {
   me {
@@ -365,3 +459,39 @@ export function useLogoutContextMutation(baseOptions?: Apollo.MutationHookOption
 export type LogoutContextMutationHookResult = ReturnType<typeof useLogoutContextMutation>;
 export type LogoutContextMutationResult = Apollo.MutationResult<LogoutContextMutation>;
 export type LogoutContextMutationOptions = Apollo.BaseMutationOptions<LogoutContextMutation, LogoutContextMutationVariables>;
+export const SearchPageMeQueryDocument = gql`
+    query SearchPageMeQuery {
+  me {
+    id
+    username
+    fullName
+  }
+}
+    `;
+
+/**
+ * __useSearchPageMeQueryQuery__
+ *
+ * To run a query within a React component, call `useSearchPageMeQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchPageMeQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchPageMeQueryQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSearchPageMeQueryQuery(baseOptions?: Apollo.QueryHookOptions<SearchPageMeQueryQuery, SearchPageMeQueryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchPageMeQueryQuery, SearchPageMeQueryQueryVariables>(SearchPageMeQueryDocument, options);
+      }
+export function useSearchPageMeQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchPageMeQueryQuery, SearchPageMeQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchPageMeQueryQuery, SearchPageMeQueryQueryVariables>(SearchPageMeQueryDocument, options);
+        }
+export type SearchPageMeQueryQueryHookResult = ReturnType<typeof useSearchPageMeQueryQuery>;
+export type SearchPageMeQueryLazyQueryHookResult = ReturnType<typeof useSearchPageMeQueryLazyQuery>;
+export type SearchPageMeQueryQueryResult = Apollo.QueryResult<SearchPageMeQueryQuery, SearchPageMeQueryQueryVariables>;
