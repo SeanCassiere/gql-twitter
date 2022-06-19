@@ -7,8 +7,8 @@ type TextAreaInputProps = React.DetailedHTMLProps<
 >;
 
 const FormTextareaInput = (props: TextAreaInputProps) => {
-	const { className, ...rest } = props;
-	return <textarea {...rest} className={`${className}`} />;
+	const { className, name, ...rest } = props;
+	return <textarea name={name} {...rest} className={`dark:text-gray-100 ${className}`} />;
 };
 
 export const FormikTextareaInput = (props: TextAreaInputProps & { label?: "string" }) => {

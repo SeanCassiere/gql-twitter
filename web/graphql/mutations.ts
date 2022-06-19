@@ -34,3 +34,11 @@ export const RegisterMutation = gql`
 		}
 	}
 `;
+
+export const PostDeleteMutation = gql`
+	mutation DeletePost($params: PostDeleteParamInput!) {
+		postDelete(params: $params) {
+			id
+		}
+	}
+`;

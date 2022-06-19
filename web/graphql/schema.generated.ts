@@ -195,6 +195,13 @@ export type RegisterFromFormMutationVariables = Exact<{
 
 export type RegisterFromFormMutation = { __typename?: 'Mutation', userCreate?: { __typename?: 'User', id: string, username: string } | null };
 
+export type DeletePostMutationVariables = Exact<{
+  params: PostDeleteParamInput;
+}>;
+
+
+export type DeletePostMutation = { __typename?: 'Mutation', postDelete: { __typename?: 'Post', id: string } };
+
 export type UserTimelinePostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -209,6 +216,11 @@ export type MeDataContextQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MeDataContextQueryQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, username: string, fullName: string } | null };
+
+export type NewPostSubscriptionSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type NewPostSubscriptionSubscription = { __typename?: 'Subscription', newPost: { __typename?: 'Post', id: string, body: string, createdAt: string, user?: { __typename?: 'FollowUser', id: string, username: string, fullName: string } | null } };
 
 
 export const LogoutContextDocument = gql`
@@ -345,6 +357,39 @@ export function useRegisterFromFormMutation(baseOptions?: Apollo.MutationHookOpt
 export type RegisterFromFormMutationHookResult = ReturnType<typeof useRegisterFromFormMutation>;
 export type RegisterFromFormMutationResult = Apollo.MutationResult<RegisterFromFormMutation>;
 export type RegisterFromFormMutationOptions = Apollo.BaseMutationOptions<RegisterFromFormMutation, RegisterFromFormMutationVariables>;
+export const DeletePostDocument = gql`
+    mutation DeletePost($params: PostDeleteParamInput!) {
+  postDelete(params: $params) {
+    id
+  }
+}
+    `;
+export type DeletePostMutationFn = Apollo.MutationFunction<DeletePostMutation, DeletePostMutationVariables>;
+
+/**
+ * __useDeletePostMutation__
+ *
+ * To run a mutation, you first call `useDeletePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePostMutation, { data, loading, error }] = useDeletePostMutation({
+ *   variables: {
+ *      params: // value for 'params'
+ *   },
+ * });
+ */
+export function useDeletePostMutation(baseOptions?: Apollo.MutationHookOptions<DeletePostMutation, DeletePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePostMutation, DeletePostMutationVariables>(DeletePostDocument, options);
+      }
+export type DeletePostMutationHookResult = ReturnType<typeof useDeletePostMutation>;
+export type DeletePostMutationResult = Apollo.MutationResult<DeletePostMutation>;
+export type DeletePostMutationOptions = Apollo.BaseMutationOptions<DeletePostMutation, DeletePostMutationVariables>;
 export const UserTimelinePostsDocument = gql`
     query UserTimelinePosts {
   postsForTimeline {
@@ -456,3 +501,39 @@ export function useMeDataContextQueryLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type MeDataContextQueryQueryHookResult = ReturnType<typeof useMeDataContextQueryQuery>;
 export type MeDataContextQueryLazyQueryHookResult = ReturnType<typeof useMeDataContextQueryLazyQuery>;
 export type MeDataContextQueryQueryResult = Apollo.QueryResult<MeDataContextQueryQuery, MeDataContextQueryQueryVariables>;
+export const NewPostSubscriptionDocument = gql`
+    subscription NewPostSubscription {
+  newPost {
+    id
+    body
+    createdAt
+    user {
+      id
+      username
+      fullName
+    }
+  }
+}
+    `;
+
+/**
+ * __useNewPostSubscriptionSubscription__
+ *
+ * To run a query within a React component, call `useNewPostSubscriptionSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewPostSubscriptionSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewPostSubscriptionSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useNewPostSubscriptionSubscription(baseOptions?: Apollo.SubscriptionHookOptions<NewPostSubscriptionSubscription, NewPostSubscriptionSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NewPostSubscriptionSubscription, NewPostSubscriptionSubscriptionVariables>(NewPostSubscriptionDocument, options);
+      }
+export type NewPostSubscriptionSubscriptionHookResult = ReturnType<typeof useNewPostSubscriptionSubscription>;
+export type NewPostSubscriptionSubscriptionResult = Apollo.SubscriptionResult<NewPostSubscriptionSubscription>;

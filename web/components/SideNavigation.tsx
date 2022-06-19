@@ -18,56 +18,52 @@ const SideNavigation: NextPage = () => {
 	return (
 		<>
 			<div className='flex flex-col space-y-3 w-full items-start pt-5 px-5'>
-				<Link href='/'>
-					<MenuItemWrapperAnchor
-						keyName='home'
-						activeKey={activeKey}
-						setActiveKey={changeActiveKey}
-						className='text-sky-500'
-						disableHoverStyles
-						Icon={<TwitterIcon className='w-7' />}
-					>
-						<span className='font-bold text-2xl'>Twitter</span>
-					</MenuItemWrapperAnchor>
-				</Link>
+				<MenuItemWrapperAnchor
+					keyName='home'
+					activeKey={activeKey}
+					setActiveKey={changeActiveKey}
+					className='text-sky-500'
+					disableHoverStyles
+					Icon={<TwitterIcon className='w-7' />}
+					href='/'
+				>
+					<span className='font-bold text-2xl'>Twitter</span>
+				</MenuItemWrapperAnchor>
 
-				<Link href='/'>
-					<MenuItemWrapperAnchor
-						keyName='home'
-						activeKey={activeKey}
-						setActiveKey={changeActiveKey}
-						Icon={<HomeIcon />}
-						ActiveIcon={<HomeFilledIcon />}
-					>
-						<span className='text-lg'>Home</span>
-					</MenuItemWrapperAnchor>
-				</Link>
+				<MenuItemWrapperAnchor
+					keyName='home'
+					activeKey={activeKey}
+					setActiveKey={changeActiveKey}
+					Icon={<HomeIcon />}
+					ActiveIcon={<HomeFilledIcon />}
+					href='/'
+				>
+					<span className='text-lg'>Home</span>
+				</MenuItemWrapperAnchor>
 
-				<Link href='/search'>
-					<MenuItemWrapperAnchor
-						keyName='search'
-						activeKey={activeKey}
-						setActiveKey={changeActiveKey}
-						Icon={<SearchIcon />}
-						ActiveIcon={<SearchFilledIcon />}
-					>
-						<span className='text-lg'>Search</span>
-					</MenuItemWrapperAnchor>
-				</Link>
+				<MenuItemWrapperAnchor
+					keyName='search'
+					activeKey={activeKey}
+					setActiveKey={changeActiveKey}
+					Icon={<SearchIcon />}
+					ActiveIcon={<SearchFilledIcon />}
+					href='/search'
+				>
+					<span className='text-lg'>Search</span>
+				</MenuItemWrapperAnchor>
 
 				{isAuth && (
 					<>
-						<Link href='/search'>
-							<MenuItemWrapperAnchor
-								keyName='profile'
-								activeKey={activeKey}
-								setActiveKey={changeActiveKey}
-								Icon={<ProfileIcon />}
-								ActiveIcon={<ProfileFilledIcon />}
-							>
-								<span className='text-lg'>Profile</span>
-							</MenuItemWrapperAnchor>
-						</Link>
+						<MenuItemWrapperAnchor
+							keyName='profile'
+							activeKey={activeKey}
+							setActiveKey={changeActiveKey}
+							Icon={<ProfileIcon />}
+							ActiveIcon={<ProfileFilledIcon />}
+							href='/search'
+						>
+							<span className='text-lg'>Profile</span>
+						</MenuItemWrapperAnchor>
 					</>
 				)}
 			</div>
@@ -93,28 +89,27 @@ const SideNavigation: NextPage = () => {
 				{/*  */}
 				{!isAuth && (
 					<>
-						<Link href='/login'>
-							<MenuItemWrapperAnchor
-								keyName='login'
-								activeKey={activeKey}
-								setActiveKey={changeActiveKey}
-								Icon={<LoginIcon />}
-								ActiveIcon={<LoginFilledIcon />}
-							>
-								<span className='text-xl'>Login</span>
-							</MenuItemWrapperAnchor>
-						</Link>
-						<Link href='/register'>
-							<MenuItemWrapperAnchor
-								keyName='register'
-								activeKey={activeKey}
-								setActiveKey={changeActiveKey}
-								Icon={<SignUpIcon />}
-								ActiveIcon={<SignUpFilledIcon />}
-							>
-								<span className='text-xl'>Sign Up</span>
-							</MenuItemWrapperAnchor>
-						</Link>
+						<MenuItemWrapperAnchor
+							keyName='login'
+							activeKey={activeKey}
+							setActiveKey={changeActiveKey}
+							Icon={<LoginIcon />}
+							ActiveIcon={<LoginFilledIcon />}
+							href='/login'
+						>
+							<span className='text-xl'>Login</span>
+						</MenuItemWrapperAnchor>
+
+						<MenuItemWrapperAnchor
+							keyName='register'
+							activeKey={activeKey}
+							setActiveKey={changeActiveKey}
+							Icon={<SignUpIcon />}
+							ActiveIcon={<SignUpFilledIcon />}
+							href='/register'
+						>
+							<span className='text-xl'>Sign Up</span>
+						</MenuItemWrapperAnchor>
 					</>
 				)}
 				{/*  */}
@@ -144,6 +139,7 @@ const MenuItemWrapperAnchor: React.FC<
 		setActiveKey?: (keyValue: string) => void;
 		Icon?: React.ReactNode;
 		ActiveIcon?: React.ReactNode;
+		href: string;
 	} & React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>
 > = (props) => {
 	const {
@@ -156,31 +152,34 @@ const MenuItemWrapperAnchor: React.FC<
 		setActiveKey,
 		Icon,
 		ActiveIcon,
+		href,
 		...rest
 	} = props;
 	return (
-		<a
-			{...rest}
-			className={`
+		<Link href={href}>
+			<a
+				{...rest}
+				className={`
 			flex flex-row transition-all rounded-3xl space-x-4 items-center cursor-pointer
 			w-full px-3 py-3
 			${!disableHoverStyles && keyName === activeKey ? "bg-gray-200 dark:bg-gray-800 font-bold" : "font-semibold"}
 			${!disableHoverStyles && "hover:bg-gray-200 dark:hover:bg-gray-800"}
 			focus:bg-gray-200 dark:focus:bg-gray-800
-		${className}`}
-			onClick={(e) => {
-				if (onClick) {
-					onClick(e);
-				}
-				if (setActiveKey) {
-					setActiveKey(keyName);
-				}
-			}}
-		>
-			{keyName !== activeKey && Icon ? Icon : null}
-			{keyName === activeKey && Icon && ActiveIcon ? ActiveIcon : keyName === activeKey && Icon ? Icon : null}
-			{children}
-		</a>
+			${className}`}
+				onClick={(e) => {
+					if (onClick) {
+						onClick(e);
+					}
+					if (setActiveKey) {
+						setActiveKey(keyName);
+					}
+				}}
+			>
+				{keyName !== activeKey && Icon ? Icon : null}
+				{keyName === activeKey && Icon && ActiveIcon ? ActiveIcon : keyName === activeKey && Icon ? Icon : null}
+				{children}
+			</a>
+		</Link>
 	);
 };
 
