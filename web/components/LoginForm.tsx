@@ -28,7 +28,6 @@ const LoginForm: React.FC<Props> = (props) => {
 				password: yup.string().required("Need your password"),
 			})}
 			onSubmit={async (values, { setFieldError }) => {
-				console.log(values);
 				await login({
 					variables: {
 						input: values,
@@ -57,7 +56,7 @@ const LoginForm: React.FC<Props> = (props) => {
 		>
 			{() => (
 				<Form>
-					<div className='flex flex-col space-y-3'>
+					<div className='flex flex-col space-y-4'>
 						<div className='w-full flex-1'>
 							<Field
 								name='identifier'

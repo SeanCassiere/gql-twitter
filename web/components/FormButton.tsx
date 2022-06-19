@@ -21,7 +21,7 @@ const FormButton = (
 	return (
 		<button
 			{...rest}
-			className={`px-3 py-1 rounded transition focus:ring ${variantStyle} text-gray-50 ${classNameOverrides}`}
+			className={`px-3 py-2 rounded transition focus:ring ${variantStyle} text-gray-50 ${classNameOverrides}`}
 		>
 			{children}
 		</button>

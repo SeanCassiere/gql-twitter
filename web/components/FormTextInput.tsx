@@ -15,12 +15,12 @@ export const FormikTextInput = (props: InputProps & { label?: string }) => {
 	return (
 		<>
 			{label && (
-				<label className='block text-sm text-gray-700' htmlFor={props.name}>
+				<label className='block text-sm text-gray-700 dark:text-gray-300' htmlFor={props.name}>
 					{label}
 				</label>
 			)}
 			<FormTextInput {...rest} />
-			{meta.touched && meta.error && <div className='error'>{meta.error}</div>}
+			{meta.touched && meta.error && <span className='text-sm text-red-500'>{meta.error}</span>}
 		</>
 	);
 };

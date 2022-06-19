@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 
-import { ThemeProvider } from "next-themes";
 import { ApolloProvider } from "@apollo/client";
+import { ThemeProvider } from "next-themes";
 
-import Navbar from "../components/Navbar";
+import SideNavigation from "../components/SideNavigation";
 
 import { AuthProvider } from "../context/authContext";
 import apolloClient from "../shared/apolloClient";
@@ -40,9 +40,9 @@ export default function App(props: AppProps) {
 					<div className='max-w-7xl w-full mx-auto'>
 						<div style={{ padding: 0 }} className='flex flex-row h-screen'>
 							<header className='flex flex-col justify-between items-center flex-none w-80'>
-								<Navbar />
+								<SideNavigation />
 							</header>
-							<main className='flex-1 border border-l border-r border-gray-200 dark:border-gray-800 rounded-none'>
+							<main className='flex-1 border border-l border-r border-t-0 border-b-0 border-gray-200 dark:border-gray-800 rounded-none'>
 								<Component {...pageProps} />
 							</main>
 						</div>

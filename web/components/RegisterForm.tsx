@@ -63,7 +63,7 @@ const RegisterForm = (props: Props) => {
 		>
 			{() => (
 				<Form>
-					<div className='flex flex-col space-y-3'>
+					<div className='flex flex-col space-y-4'>
 						<div className='w-full flex-1'>
 							<Field
 								name='fullName'
@@ -120,9 +120,7 @@ const RegisterForm = (props: Props) => {
 						</div>
 
 						<div className='min-w-12 flex-none'>
-							<FormButton type='submit' className='bg-sky-600'>
-								Sign Up
-							</FormButton>
+							<FormButton type='submit'>Sign Up</FormButton>
 						</div>
 					</div>
 				</Form>

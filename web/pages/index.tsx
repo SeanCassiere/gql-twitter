@@ -1,14 +1,14 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import Link from "next/link";
 
 import { useAuthContext } from "../context/authContext";
 
 import CreatePost from "../components/CreatePost";
-import LoginForm from "../components/LoginForm";
 import UserTImeline from "../components/UserTImeline";
 
 const Home: NextPage = () => {
-	const { getToken, isAuth } = useAuthContext();
+	const { isAuth } = useAuthContext();
 	return (
 		<>
 			<Head>
@@ -17,10 +17,19 @@ const Home: NextPage = () => {
 			</Head>
 
 			{!isAuth && (
-				<div className='pl-5 pt-4' style={{ maxWidth: 450 }}>
-					<h1>Login</h1>
+				<div className='pl-5 pt-4' style={{ maxWidth: 550 }}>
+					<h1 className='text-3xl font-bold'>
+						Need to be <span className='text-sky-500'>signed-in</span> to continue
+					</h1>
 					<div className='mt-1 pt-1'>
-						<LoginForm />
+						<div className='flex flex-col'>
+							<Link href='/login'>
+								<a className='text-sky-500 text-lg font-semibold'>Sign in</a>
+							</Link>
+							<Link href='/register'>
+								<a className='text-sky-900 dark:text-sky-600 text-lg font-semibold'>Register</a>
+							</Link>
+						</div>
 					</div>
 				</div>
 			)}

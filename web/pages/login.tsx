@@ -23,11 +23,11 @@ const Login: NextPage = () => {
 				<title>Sign In</title>
 			</Head>
 			<div className='pl-5 pt-4' style={{ maxWidth: 450 }}>
-				<h1>Login</h1>
+				<h1 className='text-3xl font-bold'>Login</h1>
 				<h2 className='mt-2'>
 					Have an account? Don&#39;t waste your time! Sign in to <code>gql-twitter</code> now.
 				</h2>
-				<div className='mt-1 pt-1'>
+				<div className='mt-1 pt-2'>
 					<LoginForm onSuccess={handleLoginSuccess} />
 				</div>
 			</div>

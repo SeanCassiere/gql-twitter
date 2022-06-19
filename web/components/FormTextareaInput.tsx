@@ -1,5 +1,5 @@
-import { useField } from "formik";
 import React from "react";
+import { useField } from "formik";
 
 type TextAreaInputProps = React.DetailedHTMLProps<
 	React.TextareaHTMLAttributes<HTMLTextAreaElement>,
@@ -7,15 +7,23 @@ type TextAreaInputProps = React.DetailedHTMLProps<
 >;
 
 const FormTextareaInput = (props: TextAreaInputProps) => {
-	return <textarea {...props} />;
+	const { className, ...rest } = props;
+	return <textarea {...rest} className={`${className}`} />;
 };
 
-export const FormikTextareaInput = (props: TextAreaInputProps) => {
+export const FormikTextareaInput = (props: TextAreaInputProps & { label?: "string" }) => {
+	const { label, ...rest } = props;
 	const [_, meta] = useField(props.name ?? "");
+
 	return (
 		<>
-			<textarea {...props} />
-			{meta.touched && meta.error && <div>{meta.error}</div>}
+			{label && (
+				<label className='block text-sm text-gray-700 dark:text-gray-300' htmlFor={props.name}>
+					{label}
+				</label>
+			)}
+			<FormTextareaInput {...rest} />
+			{meta.touched && meta.error && <span className='text-sm text-red-500'>{meta.error}</span>}
 		</>
 	);
 };
