@@ -3,9 +3,10 @@
 		"codegen",
 		"datasource",
 		"fastify",
+		"formik",
+		"headlessui",
 		"healthcheck",
-		"Mantine",
-		"modulz",
+		"heroicons",
 		"tailwindcss",
 		"unfollow",
 		"unsign"

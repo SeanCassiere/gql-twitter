@@ -1,11 +1,15 @@
 import React from "react";
-import { TextInput, Group, Button } from "@mantine/core";
-import { useForm } from "@mantine/form";
 import { useMutation } from "@apollo/client";
+
+import { Field, Form, Formik } from "formik";
+import * as yup from "yup";
 
 import { useAuthContext } from "../context/authContext";
 import { LoginFromFormMutation, LoginFromFormMutationVariables } from "../graphql/schema.generated";
 import { LoginMutation } from "../graphql/mutations";
+
+import FormButton from "./FormButton";
+import { FormikTextInput } from "./FormTextInput";
 
 interface Props {
 	onSuccess?: () => void;
@@ -16,20 +20,15 @@ const LoginForm: React.FC<Props> = (props) => {
 	const { signIn } = useAuthContext();
 	const [login] = useMutation<LoginFromFormMutation, LoginFromFormMutationVariables>(LoginMutation);
 
-	const form = useForm({
-		initialValues: {
-			identifier: "",
-			password: "",
-		},
-
-		validate: {
-			// identifier: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-		},
-	});
-
 	return (
-		<form
-			onSubmit={form.onSubmit(async (values) => {
+		<Formik
+			initialValues={{ identifier: "", password: "" }}
+			validationSchema={yup.object().shape({
+				identifier: yup.string().required("Need your username or email"),
+				password: yup.string().required("Need your password"),
+			})}
+			onSubmit={async (values, { setFieldError }) => {
+				console.log(values);
 				await login({
 					variables: {
 						input: values,
@@ -49,39 +48,26 @@ const LoginForm: React.FC<Props> = (props) => {
 							error.message?.toLowerCase().includes("invalid") &&
 							error.message?.toLowerCase().includes("credentials")
 						) {
-							form.setFieldError("identifier", "Invalid email or password");
-							form.setFieldError("password", "Invalid email or password");
+							setFieldError("identifier", "Invalid email or password");
+							setFieldError("password", "Invalid email or password");
 						}
 					});
-			})}
-			autoComplete='off'
+			}}
+			validateOnBlur={false}
 		>
-			<div className='flex flex-col space-y-3'>
-				<TextInput
-					required
-					label='Username or Email'
-					placeholder='Your username or email'
-					id='identifier'
-					type='text'
-					{...form.getInputProps("identifier")}
-				/>
+			{() => (
+				<Form>
+					<div className='flex flex-col space-y-3'>
+						<Field name='identifier' type='text' placeholder='username or email' as={FormikTextInput} required />
+						<Field name='password' type='password' placeholder='password' as={FormikTextInput} required />
+					</div>
 
-				<TextInput
-					required
-					label='Password'
-					placeholder='Your super secret password'
-					id='password'
-					type='password'
-					{...form.getInputProps("password")}
-				/>
-			</div>
-
-			<Group position='left' mt='md'>
-				<Button type='submit' className='bg-sky-600'>
-					Sign In
-				</Button>
-			</Group>
-		</form>
+					<FormButton type='submit' className='bg-sky-600'>
+						Sign In
+					</FormButton>
+				</Form>
+			)}
+		</Formik>
 	);
 };
 

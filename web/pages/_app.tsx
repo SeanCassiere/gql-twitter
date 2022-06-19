@@ -1,60 +1,55 @@
+import "tailwindcss/tailwind.css";
 import "../styles/globals.css";
-import { useState } from "react";
-import Head from "next/head";
-import { GetServerSidePropsContext } from "next";
+import { useEffect, useState } from "react";
 import type { AppProps } from "next/app";
+import Head from "next/head";
+
+import { ThemeProvider } from "next-themes";
 import { ApolloProvider } from "@apollo/client";
-import { getCookie, setCookies } from "cookies-next";
-import { MantineProvider, ColorScheme, ColorSchemeProvider, Container, Paper } from "@mantine/core";
-import { NotificationsProvider } from "@mantine/notifications";
 
 import Navbar from "../components/Navbar";
+
 import { AuthProvider } from "../context/authContext";
 import apolloClient from "../shared/apolloClient";
 
-export default function App(props: AppProps & { colorScheme: ColorScheme }) {
+export default function App(props: AppProps) {
 	const { Component, pageProps } = props;
-	const [colorScheme, setColorScheme] = useState<ColorScheme>(props.colorScheme);
 
-	const toggleColorScheme = (value?: ColorScheme) => {
-		const nextColorScheme = value || (colorScheme === "dark" ? "light" : "dark");
-		setColorScheme(nextColorScheme);
-		setCookies("mantine-color-scheme", nextColorScheme, { maxAge: 60 * 60 * 24 * 30 });
-	};
+	const [isMounted, setIsMounted] = useState(false);
+
+	useEffect(() => {
+		setIsMounted(true);
+	}, []);
+
+	if (!isMounted) {
+		return null;
+	}
 
 	return (
-		<>
+		<ThemeProvider enableSystem attribute='class'>
 			<ApolloProvider client={apolloClient}>
-				<Head>
-					<title>Mantine next example</title>
-					<meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width' />
-					<link rel='shortcut icon' href='/vercel.svg' />
-					<link rel='icon' href='/favicon.ico' />
-				</Head>
-
 				<AuthProvider>
-					<ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-						<MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
-							<NotificationsProvider>
-								<main>
-									<Container size='lg' sx={{ padding: 0 }} className='flex flex-row h-screen'>
-										<Paper className='flex flex-col justify-between items-center flex-none w-60'>
-											<Navbar />
-										</Paper>
-										<Paper className='flex-1 border border-l border-r rounded-none'>
-											<Component {...pageProps} />
-										</Paper>
-									</Container>
-								</main>
-							</NotificationsProvider>
-						</MantineProvider>
-					</ColorSchemeProvider>
+					{/*  */}
+					<Head>
+						<title>GQL Twitter</title>
+						<meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width' />
+						<link rel='shortcut icon' href='/vercel.svg' />
+						<link rel='icon' href='/favicon.ico' />
+					</Head>
+
+					<div className='max-w-7xl w-full mx-auto'>
+						<div style={{ padding: 0 }} className='flex flex-row h-screen'>
+							<header className='flex flex-col justify-between items-center flex-none w-80'>
+								<Navbar />
+							</header>
+							<main className='flex-1 border border-l border-r border-gray-200 dark:border-gray-800 rounded-none'>
+								<Component {...pageProps} />
+							</main>
+						</div>
+					</div>
+					{/*  */}
 				</AuthProvider>
 			</ApolloProvider>
-		</>
+		</ThemeProvider>
 	);
 }
-
-App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
-	colorScheme: getCookie("mantine-color-scheme", ctx) || "light",
-});

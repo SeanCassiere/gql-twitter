@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes, DetailedHTMLProps } from "react";
 
-export const FormButton = (props: DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>) => {
+const FormButton = (props: DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>) => {
 	const { children, className: classNameOverrides, ...rest } = props;
 	return (
 		<button
@@ -11,3 +11,5 @@ export const FormButton = (props: DetailedHTMLProps<ButtonHTMLAttributes<HTMLBut
 		</button>
 	);
 };
+
+export default FormButton;
