@@ -58,13 +58,31 @@ const LoginForm: React.FC<Props> = (props) => {
 			{() => (
 				<Form>
 					<div className='flex flex-col space-y-3'>
-						<Field name='identifier' type='text' placeholder='username or email' as={FormikTextInput} required />
-						<Field name='password' type='password' placeholder='password' as={FormikTextInput} required />
-					</div>
+						<div className='w-full flex-1'>
+							<Field
+								name='identifier'
+								label='Username or Email'
+								type='text'
+								placeholder='username or email'
+								as={FormikTextInput}
+								required
+							/>
+						</div>
+						<div className='w-full flex-1'>
+							<Field
+								name='password'
+								label='Password'
+								type='password'
+								placeholder='password'
+								as={FormikTextInput}
+								required
+							/>
+						</div>
 
-					<FormButton type='submit' className='bg-sky-600'>
-						Sign In
-					</FormButton>
+						<div className='min-w-12 flex-none'>
+							<FormButton type='submit'>Sign In</FormButton>
+						</div>
+					</div>
 				</Form>
 			)}
 		</Formik>

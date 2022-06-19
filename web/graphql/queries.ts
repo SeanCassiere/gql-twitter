@@ -9,6 +9,7 @@ export const UserTimePostsQuery = gql`
 			user {
 				id
 				username
+				fullName
 			}
 		}
 	}

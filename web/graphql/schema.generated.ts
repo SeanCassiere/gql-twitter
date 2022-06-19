@@ -198,7 +198,7 @@ export type RegisterFromFormMutation = { __typename?: 'Mutation', userCreate?: {
 export type UserTimelinePostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserTimelinePostsQuery = { __typename?: 'Query', postsForTimeline: Array<{ __typename?: 'Post', id: string, body: string, createdAt: string, user?: { __typename?: 'FollowUser', id: string, username: string } | null }> };
+export type UserTimelinePostsQuery = { __typename?: 'Query', postsForTimeline: Array<{ __typename?: 'Post', id: string, body: string, createdAt: string, user?: { __typename?: 'FollowUser', id: string, username: string, fullName: string } | null }> };
 
 export type RefreshTokenContextQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -354,6 +354,7 @@ export const UserTimelinePostsDocument = gql`
     user {
       id
       username
+      fullName
     }
   }
 }

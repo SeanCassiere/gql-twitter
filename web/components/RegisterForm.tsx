@@ -64,26 +64,67 @@ const RegisterForm = (props: Props) => {
 			{() => (
 				<Form>
 					<div className='flex flex-col space-y-3'>
-						<Field name='fullName' type='text' placeholder='full name' as={FormikTextInput} required />
+						<div className='w-full flex-1'>
+							<Field
+								name='fullName'
+								label='Full name'
+								type='text'
+								placeholder='Alice Jones'
+								as={FormikTextInput}
+								required
+							/>
+						</div>
 
-						<Field name='email' type='text' placeholder='email' as={FormikTextInput} required />
+						<div className='w-full flex-1'>
+							<Field
+								name='email'
+								label='Email'
+								type='text'
+								placeholder='alice@example.com'
+								as={FormikTextInput}
+								required
+							/>
+						</div>
 
-						<Field name='username' type='text' placeholder='username' as={FormikTextInput} required />
+						<div className='w-full flex-1'>
+							<Field
+								name='username'
+								label='Username'
+								type='text'
+								placeholder='AliceJones98'
+								as={FormikTextInput}
+								required
+							/>
+						</div>
 
-						<Field name='password' type='password' placeholder='password' as={FormikTextInput} required />
+						<div className='w-full flex-1'>
+							<Field
+								name='password'
+								label='Password'
+								type='password'
+								placeholder='Super secure password..'
+								as={FormikTextInput}
+								required
+							/>
+						</div>
 
-						<Field
-							name='confirmPassword'
-							type='password'
-							placeholder='confirm password'
-							as={FormikTextInput}
-							required
-						/>
+						<div className='w-full flex-1'>
+							<Field
+								name='confirmPassword'
+								label='Confirm password'
+								type='password'
+								placeholder='Same as the above...'
+								as={FormikTextInput}
+								required
+							/>
+						</div>
+
+						<div className='min-w-12 flex-none'>
+							<FormButton type='submit' className='bg-sky-600'>
+								Sign Up
+							</FormButton>
+						</div>
 					</div>
-
-					<FormButton type='submit' className='bg-sky-600'>
-						Sign Up
-					</FormButton>
 				</Form>
 			)}
 		</Formik>

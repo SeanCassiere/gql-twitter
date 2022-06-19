@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/client";
 import Image from "next/image";
 import Link from "next/link";
 
-import { Form, Formik, Field, useField } from "formik";
+import { Form, Formik, Field } from "formik";
 import * as yup from "yup";
 
 import FormButton from "./FormButton";
@@ -76,7 +76,7 @@ const CreatePost: React.FC<Props> = (props) => {
 										name='body'
 										as={FormikTextareaInput}
 										rows={3}
-										className='p-2 w-full text-sm text-gray-900 border rounded border-gray-50 bg-white placeholder:text-lg'
+										className='p-2 w-full text-sm text-gray-900 dark:bg-slate-800 border rounded border-gray-50 dark:border-gray-600 placeholder:text-lg'
 										placeholder="What's happening?"
 										maxLength={MESSAGE_MAX_LENGTH}
 										required
