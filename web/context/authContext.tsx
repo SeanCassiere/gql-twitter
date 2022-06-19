@@ -59,10 +59,18 @@ export const AuthProvider: FC<{ children: any }> = (props) => {
 		},
 	});
 	const signOut = useCallback(() => {
-		logout().then(() => {
+		const clearFunction = () => {
 			localStorage.removeItem(ACCESS_TOKEN_KEY);
 			setUserToken(null);
-		});
+		};
+		logout()
+			.then(() => {
+				clearFunction();
+			})
+			.catch((e) => {
+				console.log(e);
+				clearFunction();
+			});
 	}, [logout]);
 
 	const getToken = useCallback(() => {
