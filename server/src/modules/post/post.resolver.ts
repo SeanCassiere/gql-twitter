@@ -130,8 +130,9 @@ class PostResolver {
 	@Subscription(() => Post, {
 		topics: ["NEW_POST"],
 		filter: ({ context, payload }) =>
-			payload.user.followedBy.map((user: User) => user.id).includes(context.user?.id ?? "") ||
-			payload.userId === context.user?.id,
+			payload.user.followedBy.map((user: User) => user.id).includes(context.user?.id ?? ""),
+		//  ||
+		// payload.userId === context.user?.id,
 	})
 	newPost(@Root() post: any): Post {
 		return {
